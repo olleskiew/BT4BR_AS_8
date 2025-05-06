@@ -1,0 +1,56 @@
+---
+title: "Plot"
+author: "Olga Leśkiewicz"
+format:
+  html:
+    embed-resources: true
+editor: visual
+---
+
+## Introduction
+
+I did this plot in my last assignment, but I didn't use ggplot, so this week I done it again with the right library.
+
+## Code
+
+As always I start with installing necessary libraries and creating dataframes of vectors containing the data:
+
+```{r}
+#| echo: false
+#Installing necessary libraries:
+library(dplyr)
+library(scales) #It allows us using label_wrap in next codeblock
+library(tidyr)
+library(ggplot2)
+
+#Creating data frame with data:
+my_data <- data.frame(
+  chronic_conditions <- c("High blood pressure", "Arthritis", "Back problems", "Eye problems", "Heart disease", "Osteoporosis", "Diabetes", "Urinary incontinence"),
+  the_percentage_65_or_older <- c(52.9, 43.4, 28.6, 27.9, 22.7, 18.1, 17.2, 11.7)
+)
+```
+
+I used webpage: https://r-graph-gallery.com/color-palette-finder for choosing colors. They are part of pallet "Antique". After defining our colors we start plotting.\
+Since my labels where overlapping I started looking for solutions to this problem.\
+This webpage: <https://www.andrewheiss.com/blog/2022/06/23/long-labels-ggplot/> summarizes the available solutions and afer reading it I decided to use label_wrap from library scales
+
+```{r}
+
+#We define our colors
+color <- c("#855C75FF", "#D9AF6BFF", "#AF6458FF", "#736F4CFF", 
+           "#526A83FF", "#625377FF", "#68855CFF", "#9C9C5EFF")
+
+
+#We start plotting 
+ggplot(my_data, aes(x = chronic_conditions, y = the_percentage_65_or_older, fill = chronic_conditions)) +
+  geom_col(show.legend = FALSE) +
+  scale_x_discrete(labels = label_wrap(10))+ #this commeds breakes labels
+  scale_fill_manual(values = color) + #we fill our columns with previously defined colors
+  labs(
+    x = "Chronic Condition", 
+    y = "Percentage (65+ years old)",
+    title = "Percentage of People 65+ years old with Chronic Conditions"
+  ) +
+  theme_minimal() 
+  
+```
